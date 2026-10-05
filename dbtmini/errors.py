@@ -51,6 +51,7 @@ class ConfigError(DbtminiError):
             model_name=model_name,
         )
 
+
 class RenderError(DbtminiError):
     def __init__(
         self,
@@ -69,6 +70,7 @@ class RenderError(DbtminiError):
             stage="execution",
             model_name=model_name,
         )
+
 
 class ProjectError(DbtminiError):
     def __init__(
@@ -104,6 +106,7 @@ class ResourceNotFoundError(ProjectError):
             model_name=model_name,
         )
 
+
 class ManifestError(ProjectError):
     def __init__(
         self,
@@ -119,6 +122,7 @@ class ManifestError(ProjectError):
             line=line,
             model_name=model_name,
         )
+
 
 class DagError(DbtminiError):
     def __init__(
@@ -136,9 +140,10 @@ class DagError(DbtminiError):
             model_name=model_name,
         )
 
+
 class CycleError(DbtminiError):
     def __init__(
-        self, 
+        self,
         message: str,
         *,
         cycle_path: list[str],
@@ -148,8 +153,5 @@ class CycleError(DbtminiError):
     ) -> None:
         self.cycle_path = cycle_path
         super().__init__(
-            message=message,
-            file_path=file_path,
-            line=line,
-            model_name=model_name
+            message=message, file_path=file_path, line=line, model_name=model_name
         )

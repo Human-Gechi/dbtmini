@@ -1,9 +1,10 @@
-from typing import Any, Optional, Literal
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any, Literal, Optional
+
 
 @dataclass(frozen=True)
-class Model():
+class Model:
     name: str
     file_path: Path | str
     sql_text: str
@@ -12,7 +13,7 @@ class Model():
 
 
 @dataclass(frozen=True)
-class TestSpec():
+class TestSpec:
     name: str
     column: str
     test_type: Literal["not_nulL", "unique"]
