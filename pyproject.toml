@@ -52,4 +52,5 @@ warn_unused_configs = true
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["dbtmini*"]
-exclude = ["example_project*", "tests*"]
+exclude = ["example_project*", "tests*"]
+
