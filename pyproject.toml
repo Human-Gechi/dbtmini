@@ -1,9 +1,7 @@
 [project]
 name = "dbtmini"
 version = "0.1.0"
-authors = [
-    { name = "Ogechukwu Okoli", email = "[EMAIL_ADDRESS]" },
-]
+authors = [{ name = "Ogechukwu Okoli", email = "[okoliogechi74@gmail.com]" }]
 description = "A minimal implementation of dbt that runs on DuckDB"
 readme = "README.md"
 requires-python = ">=3.10"
