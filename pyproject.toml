@@ -1,0 +1,37 @@
+[project]
+name = "dbtmini"
+version = "0.1.0"
+authors = [
+    { name = "Ogechukwu Okoli", email = "[EMAIL_ADDRESS]" },
+]
+description = "A minimal implementation of dbt that runs on DuckDB"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "duckdb>=1.0.0",
+    "jinja2>=3.1.2",
+    "pyyaml>=6.0.1",
+    "pytest>=8.0.0",
+    "ruff>=0.6.0",
+    "mypy>=1.11.0",
+    "pre-commit>=3.5.0",
+
+]
+
+[project.scripts]
+entry_point = ""
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = []
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+warn_unused_configs = true

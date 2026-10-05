@@ -1,0 +1,7 @@
+duckdb
+jinja2
+pyyaml
+pytest
+ruff
+mypy
+pre-commit
