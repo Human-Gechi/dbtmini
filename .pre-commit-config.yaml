@@ -18,5 +18,6 @@ repos:
     rev: v1.11.2
     hooks:
       - id: mypy
+        args: [--explicit-package-bases]
         additional_dependencies:
           - types-PyYAML
