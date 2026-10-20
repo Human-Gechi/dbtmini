@@ -8,7 +8,14 @@ from dbtmini.errors import CycleError, DagError
 def _find_cycle_path(
     unresolved: set[str], dependencies: dict[str, set[str]]
 ) -> list[str]:
-
+    """
+    Find a cycle in the dependency graph.
+    param:
+        unresolved: Set of nodes that are part of the cycle.
+        dependencies: Mapping of model_name -> set of upstream models it depends on.
+    return:
+        List of model names in the cycle path.
+    """
     visited: set[str] = set()
     path: list[str] = []
     path_index: dict[str, int] = {}

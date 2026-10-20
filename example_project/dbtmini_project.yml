@@ -1,0 +1,19 @@
+name: "example_project"
+version: "0.1.0"
+
+model-paths:
+  - "models"
+seed-paths:
+  - "seeds"
+test-paths:
+  - "tests"
+target-path: "target"
+
+database: ":memory:"
+schema: "main"
+
+# Model materialization settings
+models:
+  materialized: "view"       # Project default
+  marts:
+    materialized: "table"    # Folder-level override
