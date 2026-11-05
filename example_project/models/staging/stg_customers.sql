@@ -1,4 +1,7 @@
-{{ config(materialization='table') }}
+{{ config(materialized='view') }}
 
--- testing waters
-select * from {{ ref('customers') }}
+select
+    id as customer_id,
+    name,
+    email
+from {{ ref('customers') }}
