@@ -68,6 +68,20 @@ def _resolve_paths(raw_dir: str, base_dir: Path) -> Path:
 
 
 def _project_directory(project_dir_or_file: str | Path) -> dict[str, Any]:
+    """
+    Load and validate a dbtmini project configuration file.
+    Resolves the configuration file path, parses the YAML contents, verifies
+    all required keys are present, and validates that field types and values match
+    the expected schema.
+    Args:
+        project_dir_or_file: Path to the project directory containing
+            'dbtmini_project.yml', or a direct path to the configuration file.
+    Returns:
+        dict[str, Any]: The parsed and validated project configuration dictionary.
+    Raises:
+        ConfigError: If the configuration file is missing, contains invalid YAML,
+            has unknown keys, or fails schema validation.
+    """
     target = Path(project_dir_or_file).resolve()
     if target.is_dir():
         project_file = target / "dbtmini_project.yml"

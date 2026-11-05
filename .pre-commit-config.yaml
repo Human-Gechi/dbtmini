@@ -21,3 +21,5 @@ repos:
         args: [--explicit-package-bases]
         additional_dependencies:
           - types-PyYAML
+          - typer
+          - jinja2

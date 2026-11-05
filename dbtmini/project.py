@@ -11,13 +11,13 @@ from dbtmini.models import Model
 
 MODEL_NAME_PATTERN = re.compile(r"^[a-zA-Z0-9_]+$")
 CONFIG_PATTERN = re.compile(
-    r"config\s*\(\s*(?:materialization)\s*=\s*['\"](\w+)['\"]\s*\)"
+    r"config\s*\(\s*(?:materialized)\s*=\s*['\"](\w+)['\"]\s*\)"
 )
 
 
 def _extract_config(sql_text: str) -> dict[str, Any]:
-    """Look for {{ config(materilzation='table') }}
-    or {{ config(materialization='view') }}"""
+    """Look for {{ config(materilzed='table') }}
+    or {{ config(materialized='view') }}"""
     config: dict[str, Any] = {}
     match = CONFIG_PATTERN.search(sql_text)
     if match:
@@ -32,6 +32,19 @@ def _normalize_paths(paths: str | Path | Sequence[str | Path]) -> list[Path]:
 
 
 def _validate_model_name(name: str, file_path: Path) -> None:
+    """
+    Check that a model name follows dbt naming conventions.
+    Model names must consist of only alphanumeric characters and underscores,
+    and cannot start with a number.
+
+    Args:
+        name: The model name to validate.
+        file_path: The file path of the model, used for error reporting.
+
+    Raises:
+        ProjectError: If the model name is invalid.
+    """
+
     if not MODEL_NAME_PATTERN.match(name):
         raise ProjectError(
             f"""Invalid model name '{name}'.
@@ -136,6 +149,3 @@ def discover_seeds(
 #    models = discover_models(path, folder=model_folder)
 #   seeds = discover_seeds(path, folder=seed_folder)
 #   return models, seeds
-
-
-print(discover_models("example_project"))
