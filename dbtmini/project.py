@@ -47,7 +47,7 @@ def _validate_model_name(name: str, file_path: Path) -> None:
 
     if not MODEL_NAME_PATTERN.match(name):
         raise ProjectError(
-            f"""Invalid model name '{name}'.
+            message=f"""Invalid model name '{name}'.
             Only letters, digits, and underscores are allowed.""",
             file_path=file_path,
             model_name=name,
@@ -86,7 +86,7 @@ def discover_models(
             if name in seen_models:
                 prev_path = seen_models[name]
                 raise ProjectError(
-                    f"""Duplicate model '{name}' found in '{prev_path}'
+                    message=f"""Duplicate model '{name}' found in '{prev_path}'
                     and '{file_path}'""",
                     file_path=file_path,
                     model_name=name,
