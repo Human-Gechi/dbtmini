@@ -1,5 +1,7 @@
-from dataclasses import dataclass, field
+import json
+from dataclasses import asdict, dataclass, field
 from enum import Enum
+from pathlib import Path
 
 from dbtmini.materialization import Materialization
 from dbtmini.seeds import SeedResult
@@ -37,3 +39,43 @@ class RunResult:
     @property
     def total_count(self) -> int:
         return len(self.result)
+
+    @property
+    def exit_code(self) -> int:
+        return 1 if self.error_count > 0 else 0
+
+
+def write_run_results(run_results: RunResult, target_path: Path) -> Path:
+    target_path.mkdir(parents=True, exist_ok=True)
+
+    destination = target_path / "run_results.json"
+    with open(destination, mode="w", encoding="utf-8") as file:
+        json.dump(asdict(run_results), file, indent=4)
+
+    return destination
+
+
+def format_summary_results(run_result: RunResult) -> str:
+    lines: list[str] = []
+
+    divider = "-" * 65
+
+    lines.append(f"{'MODEL':<25} {'STATUS':<12} {'TIME':<12} MESSAGE")
+    lines.append(divider)
+
+    for model in run_result.result:
+        duration_str = f"{model.duration:.3f}s"
+        row = f"""{model.model_name:<25} {model.status.value.upper():<12}
+        {duration_str:<12} {model.message}"""
+        lines.append(row)
+
+    lines.append(divider)
+    footer = (
+        f"Summary: {run_result.success_count} passed, "
+        f"{run_result.error_count} failed, "
+        f"{run_result.total_count} total | "
+        f"Total time: {run_result.elasped_time:.2f}s"
+    )
+    lines.append(footer)
+
+    return "\n".join(lines)
