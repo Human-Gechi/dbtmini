@@ -23,3 +23,4 @@ repos:
           - types-PyYAML
           - typer
           - jinja2
+          - duckdb
