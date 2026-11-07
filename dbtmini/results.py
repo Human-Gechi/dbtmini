@@ -1,7 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 
 from dbtmini.materialization import Materialization
+from dbtmini.seeds import SeedResult
 
 
 class RunStatus(str, Enum):
@@ -10,7 +11,7 @@ class RunStatus(str, Enum):
     SKIPPED = "skipped"
 
 
-@dataclass
+@dataclass(frozen=True)
 class ModelResult:
     model_name: str
     status: RunStatus
@@ -19,9 +20,20 @@ class ModelResult:
     message: str = ""
 
 
-@dataclass
+@dataclass(frozen=True)
 class RunResult:
-    result = list[ModelResult]
+    result: list[ModelResult]
     elasped_time: float
-    success_count: int = 0
-    error_count: int = 0
+    seed_results: list[SeedResult] = field(default_factory=list)
+
+    @property
+    def success_count(self) -> int:
+        return sum(1 for r in self.result if r.status == RunStatus.SUCCESS)
+
+    @property
+    def error_count(self) -> int:
+        return sum(1 for r in self.result if r.status == RunStatus.ERROR)
+
+    @property
+    def total_count(self) -> int:
+        return len(self.result)
