@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from enum import Enum
 
+from dbtmini.config import ProjectConfig
 from dbtmini.errors import ConfigError
 
 
@@ -47,9 +48,7 @@ def build_create_statement(
     relation = build_relation_name(schema=schema, model_name=model_name)
     kind = materialization.value.upper()
     clean_sql = _strip_trailing_colons(sql=sql)
-    create = f"""
-    CREATE OR REPLACE {kind} {relation} AS ({clean_sql});
-    """
+    create = f"""CREATE OR REPLACE {kind} {relation} AS ({clean_sql});"""
 
     return create
 
@@ -78,3 +77,16 @@ def build_switch_statement(
     statements.append(build_create_statement(model_name, sql, switches, schema))
 
     return statements
+
+
+def resolve_materialization(
+    config: ProjectConfig,
+    folder: str | None = None,
+    model_materialization: str | None = None,
+    cli_materialization: str | None = None,
+) -> Materialization:
+
+    resolve = config._resolve_materialization(
+        folder, model_materialization, cli_materialization
+    )
+    return Materialization.from_Str(resolve)
