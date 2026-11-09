@@ -6,6 +6,7 @@ from pathlib import Path
 import duckdb
 
 from dbtmini.config import ProjectConfig
+from dbtmini.errors import ExecutionError
 from dbtmini.materialization import (
     build_switch_statement,
     resolve_materialization,
@@ -57,8 +58,15 @@ def execute_project(
         )
 
         t0 = time.perf_counter()
-        for statement in statements:
-            conn.execute(statement)
+        try:
+            for statement in statements:
+                conn.execute(statement)
+        except duckdb.Error as e:
+            raise ExecutionError(
+                message=f"Database execution error: {e}",
+                file_path=model.file_path,
+                model_name=model_name,
+            ) from e
         duration = time.perf_counter() - t0
 
         # Record outcome

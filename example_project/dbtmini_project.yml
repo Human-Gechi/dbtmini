@@ -9,7 +9,7 @@ test-paths:
   - "tests"
 target-path: "target"
 
-database: ":memory:"
+database: "dbtmini.duckdb"
 schema: "main"
 
 # Model materialization settings

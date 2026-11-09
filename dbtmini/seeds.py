@@ -52,9 +52,9 @@ def load_seed(
     normalised_path = file_path.resolve().as_posix()
     try:
         conn.execute(f"""
-                CREATE OR REPLACE TABLE {relation_name} AS
-                SELECT * FROM read_csv('{normalised_path}', header=true);
-                """)
+            CREATE OR REPLACE TABLE {relation_name} AS
+            SELECT * FROM read_csv('{normalised_path}', header=true, strict_mode=false);
+            """)
     except duckdb.Error as e:
         raise ProjectError(
             message=f"Failed to load seed '{name}' from {file_path}: {e}",

@@ -1,5 +1,6 @@
 import json
 from dataclasses import asdict, dataclass, field
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
 
@@ -47,10 +48,11 @@ class RunResult:
 
 def write_run_results(run_results: RunResult, target_path: Path) -> Path:
     target_path.mkdir(parents=True, exist_ok=True)
-
-    destination = target_path / "run_results.json"
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    file_naming = f"run_results_{timestamp}.json"
+    destination = target_path / file_naming
     with open(destination, mode="w", encoding="utf-8") as file:
-        json.dump(asdict(run_results), file, indent=4)
+        json.dump(asdict(run_results), file, indent=2, default=str)
 
     return destination
 

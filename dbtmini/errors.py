@@ -90,7 +90,7 @@ class ProjectError(DbtminiError):
         )
 
 
-class ResourceNotFoundError(ProjectError):
+class ExecutionError(DbtminiError):
     def __init__(
         self,
         message: str,
@@ -103,23 +103,7 @@ class ResourceNotFoundError(ProjectError):
             message=message,
             file_path=file_path,
             line=line,
-            model_name=model_name,
-        )
-
-
-class ManifestError(ProjectError):
-    def __init__(
-        self,
-        message: str,
-        *,
-        file_path: str | Path | None = None,
-        line: int | None = None,
-        model_name: str | None = None,
-    ) -> None:
-        super().__init__(
-            message=message,
-            file_path=file_path,
-            line=line,
+            stage="execution",
             model_name=model_name,
         )
 
