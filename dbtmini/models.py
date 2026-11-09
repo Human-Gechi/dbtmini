@@ -16,7 +16,7 @@ class Model:
 class TestSpec:
     name: str
     column: str
-    test_type: Literal["not_nulL", "unique"]
+    test_type: Literal["not_null", "unique"]
     severity: Optional[Literal["error", "warn"]] = "error"
 
 
