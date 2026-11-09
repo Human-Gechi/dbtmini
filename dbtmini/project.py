@@ -6,8 +6,10 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 from dbtmini.errors import ProjectError
-from dbtmini.models import Model
+from dbtmini.models import Model, TestSpec
 
 MODEL_NAME_PATTERN = re.compile(r"^[a-zA-Z0-9_]+$")
 CONFIG_PATTERN = re.compile(
@@ -137,6 +139,53 @@ def discover_seeds(
                 seeds[seed_name] = file_path
 
     return seeds
+
+
+def discover_tests(
+    test_paths: str | Path | Sequence[str | Path],
+    folder: str = "tests",
+) -> list[TestSpec]:
+
+    normalized_paths = _normalize_paths(test_paths)
+    tests: list[TestSpec] = []
+
+    for base_path in normalized_paths:
+        if (base_path / folder).is_dir():
+            base_path = base_path / folder
+        elif not base_path.is_dir():
+            continue
+
+        for file_path in base_path.glob("*.yml"):
+            content = file_path.read_text(encoding="utf-8")
+            if not content.strip():
+                continue
+            data = yaml.safe_load(content)
+            if not isinstance(data, dict):
+                continue
+
+            model_list = data.get("models", [])
+            for model in model_list:
+                model_name = model.get("name", "")
+                columns = model.get("columns", [])
+                for col in columns:
+                    col_name = col.get("name", "")
+                    test_list = col.get("tests", [])
+                    for t in test_list:
+                        test_type = t if isinstance(t, str) else list(t.keys())[0]
+                        if test_type not in ("not_null", "unique"):
+                            raise ProjectError(
+                                message=f"""Unsupported test '{test_type}'
+                                for column '{col_name}'.
+                                Allowed: 'not_null', 'unique'""",
+                                file_path=file_path,
+                                model_name=model_name,
+                            )
+                        tests.append(
+                            TestSpec(
+                                name=model_name, column=col_name, test_type=test_type
+                            )
+                        )
+    return tests
 
 
 # def discover_project(
