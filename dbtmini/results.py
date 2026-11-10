@@ -60,14 +60,14 @@ def write_run_results(run_results: RunResult, target_path: Path) -> Path:
 def format_summary_results(run_result: RunResult) -> str:
     lines: list[str] = []
 
-    divider = "-" * 65
+    divider = "-" * 80
 
     lines.append(f"{'MODEL':<25} {'STATUS':<12} {'TIME':<12} MESSAGE")
     lines.append(divider)
 
     for model in run_result.result:
         duration_str = f"{model.duration:.3f}s"
-        row = f"""{model.model_name:<25} {model.status.value.upper():<12}
+        row = f"""{model.model_name:<25} {model.status.value.upper():<12}\
         {duration_str:<12} {model.message}"""
         lines.append(row)
 
