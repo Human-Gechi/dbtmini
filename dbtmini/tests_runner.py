@@ -28,7 +28,7 @@ def generate_not_null(test: TestSpec, schema: str) -> str:
     relation = build_relation_name(schema=schema, model_name=test.name)
 
     sql_statement = (
-        f"""SELECT {quoted_column} FROM {relation} WHERE {quoted_column} IS NULL;"""
+        f"""SELECT {quoted_column} FROM {relation} WHERE {quoted_column} IS NULL"""
     )
 
     return sql_statement
@@ -44,7 +44,7 @@ def generate_unique(test: TestSpec, schema: str) -> str:
             FROM {relation}
                 WHERE {quoted_column} IS NOT NULL
             GROUP BY {quoted_column}
-            HAVING COUNT(*) > 1;"""
+            HAVING COUNT(*) > 1"""
 
     return sql_statement
 
@@ -108,9 +108,9 @@ def run_tests(
 def format_test_summary(test_results: list[TestResult]) -> str:
     lines: list[str] = []
 
-    divider = "-" * 70
+    divider = "-" * 100
 
-    lines.append(f"{'TEST':<40} {'STATUS':<10} {'TIME':<10} MESSAGE")
+    lines.append(f"{'TEST':<50} {'STATUS':<20} {'TIME':<10} MESSAGE")
     lines.append(divider)
 
     pass_count = sum(1 for r in test_results if r.status == TestStatus.PASS)
@@ -120,13 +120,13 @@ def format_test_summary(test_results: list[TestResult]) -> str:
     for r in test_results:
         duration_str = f"{r.duration:.3f}s"
         lines.append(
-            f"""{r.test_name:<40} {r.status.value.upper():<10}
+            f"""{r.test_name:<50} {r.status.value.upper():<20}\
             {duration_str:<10} {r.message or ""}"""
         )
 
     lines.append(divider)
     lines.append(
-        f"""Passed: {pass_count} | Failed: {fail_count}
+        f"""Passed: {pass_count} | Failed: {fail_count}\
         | Errors: {error_count} | Total: {len(test_results)}"""
     )
 
