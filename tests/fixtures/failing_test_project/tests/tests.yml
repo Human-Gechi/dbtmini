@@ -1,0 +1,9 @@
+models:
+  - name: customers
+    columns:
+      - name: id
+        tests:
+          - unique
+      - name: email
+        tests:
+          - not_null

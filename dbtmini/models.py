@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any, Literal, Optional
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True)  # Dataclass for Models
 class Model:
     name: str
     file_path: Path | str
@@ -13,7 +13,7 @@ class Model:
 
 
 @dataclass(frozen=True)
-class TestSpec:
+class TestSpec:  # Dataclass for tests run on models
     name: str
     column: str
     test_type: str
@@ -21,7 +21,7 @@ class TestSpec:
 
 
 @dataclass(frozen=True)
-class ParseResult:
+class ParseResult:  # result of the rendering from sql
     model_name: str
     dependencies: frozenset[str] = field(default_factory=frozenset)
     config: dict[str, Any] = field(default_factory=dict, hash=False)

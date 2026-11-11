@@ -1,0 +1,16 @@
+name: "valid_project"
+version: "0.1.0"
+
+model-paths:
+  - "models"
+seed-paths:
+  - "seeds"
+test-paths:
+  - "tests"
+target-path: "target"
+
+database: ":memory:"
+schema: "main"
+
+models:
+  materialized: "view"
