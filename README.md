@@ -3,6 +3,54 @@
 A minimal implementation of dbt (data build tool) written in Python that runs SQL transformations, CSV seeds, and data quality tests on **DuckDB**.
 
 ---
+## Repository Structure
+
+```text
+dbtmini/
+├── dbtmini/                       # Core package
+│   ├── cli.py                     # Typer CLI commands (compile, run, test, build)
+│   ├── config.py                  # Project YAML loader & ProjectConfig validation
+│   ├── dag.py                     # Topological sorting (Kahn's algorithm) & cycle check
+│   ├── errors.py                  # Custom error hierarchy (ConfigError, DagError, etc.)
+│   ├── executor.py                # Runs seeds and models against DuckDB
+│   ├── materialization.py         # View/table DDL generation & switching
+│   ├── models.py                  # Model, TestSpec, and ParseResult dataclasses
+│   ├── project.py                 # Discovers models, CSV seeds, and YAML tests
+│   ├── renderer.py                # Two-pass Jinja2 parser & SQL renderer
+│   ├── results.py                 # RunResult summaries and JSON log writer
+│   ├── seeds.py                   # CSV validation and DuckDB seed loader
+│   └── tests_runner.py            # SQL test generators (not_null, unique) & runner
+├── example_project/               # Sample dbtmini project
+│   ├── dbtmini_project.yml        # Project config
+│   ├── models/
+│   │   ├── staging/               # stg_customers.sql, stg_orders.sql, stg_payments.sql
+│   │   ├── intermediate/          # int_customer_orders.sql, int_customer_payments.sql
+│   │   └── marts/                 # dim_customers.sql, fct_orders.sql
+│   ├── seeds/                     # customers.csv, orders.csv, payments.csv
+│   └── tests/
+│       └── tests.yml              # Column data quality tests
+├── tests/                         # Automated test suite
+│   ├── conftest.py                # Shared pytest fixtures
+│   ├── fixtures/                  # Sample valid and error-case projects
+│   ├── unit/                      # Unit tests per core module
+│   └── integration/               # CLI and end-to-end pipeline tests
+├── docs/                          # Documentation
+│   ├── architecture.md
+│   ├── design-decisions.md
+│   └── how-it-works.md
+├── .gitignore
+├── .pre-commit-config.yaml        # Pre-commit hooks (formatting, YAML checks, ruff, mypy)
+├── pyproject.toml                 # Package metadata, scripts, ruff, mypy, and pytest config
+├── requirements.txt               # Direct Python dependencies
+└── README.md
+```
+## Documentation
+Check te files for detailed documentation of the project.
+
+- [Architecture](docs/architecture.md): High-level data flow, module responsibilities, and project layout.
+- [How It Works](docs/how-it-works.md): Step-by-step walkthrough from config loading to DuckDB execution and testing.
+- [Design Decisions](docs/design-decisions.md): Trade-offs and key differences between `dbtmini` and full dbt Core.
+
 
 ## Features
 
@@ -131,21 +179,6 @@ models:
 
 ---
 
-## Repository Structure
-
-```text
-dbtmini/
-├── dbtmini/                 # Core package (CLI, config, discovery, DAG, renderer, executor, tests)
-├── example_project/         # Sample project with seeds, models, and YAML tests
-├── tests/                   # Unit and integration test suites + fixture projects
-├── docs/                    # Project documentation
-├── .pre-commit-config.yaml  # Pre-commit hooks (formatting, YAML checks, ruff, mypy)
-├── pyproject.toml           # Package metadata, scripts, ruff, mypy, and pytest config
-└── README.md
-```
-
----
-
 ### Pre-commit Hooks
 
 This project uses `pre-commit` (configured in [`.pre-commit-config.yaml`](.pre-commit-config.yaml)) to automatically check trailing whitespace, file endings, YAML syntax, `ruff` lint/format, and `mypy` type checking before each commit.
@@ -161,11 +194,3 @@ Run all hooks manually across the repository:
 ```bash
 pre-commit run --all-files
 ```
-
----
-
-## Documentation
-
-- [Architecture](docs/architecture.md): High-level data flow, module responsibilities, and project layout.
-- [How It Works](docs/how-it-works.md): Step-by-step walkthrough from config loading to DuckDB execution and testing.
-- [Design Decisions](docs/design-decisions.md): Trade-offs and key differences between `dbtmini` and full dbt Core.
