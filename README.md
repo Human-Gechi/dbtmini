@@ -46,6 +46,7 @@ A minimal implementation of dbt (data build tool) written in Python that runs SQ
 ├── .gitignore
 ├── .pre-commit-config.yaml        # Pre-commit hooks (formatting, YAML checks, ruff, mypy)
 ├── CHANGELOG.md
+├── LICENSE
 ├── pyproject.toml                 # Package metadata, scripts, ruff, mypy, and pytest config
 ├── requirements.txt               # Direct Python dependencies
 └── README.md
@@ -200,3 +201,9 @@ Run all hooks manually across the repository:
 ```bash
 pre-commit run --all-files
 ```
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
