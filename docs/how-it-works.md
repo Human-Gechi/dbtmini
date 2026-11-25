@@ -57,7 +57,11 @@ In **Pass 2 (`render_model`)**, Jinja2 runs again—this time replacing every `{
 
 If you run `dbtmini compile`, the pipeline prints the execution order and saves the plain SQL files to `target/compiled/` without touching DuckDB.
 
-> **Screenshot Needed:** Add a screenshot of running `dbtmini compile` in your terminal showing the printed `->` dependency chain and the generated `.sql` files inside `target/compiled/`.
+<img width="936" height="56" alt="image" src="https://github.com/user-attachments/assets/f83cc8ee-7838-4957-925c-aa55a41d4cb6" />
+
+<img width="297" height="269" alt="image" src="https://github.com/user-attachments/assets/8aaad70d-bd9b-42ec-9e42-5140ffcc177c" />
+
+
 
 ---
 
@@ -77,6 +81,7 @@ When you run `dbtmini run`, [executor.py](../dbtmini/executor.py) opens a DuckDB
    - If the model switched type (for example, from `view` to `table`), it runs `DROP <old_type> IF EXISTS` first and then `CREATE OR REPLACE <new_type>`.
 5. **Print summary & save JSON**: [results.py](../dbtmini/results.py) formats the summary table and writes a timestamped log to `target/run_results_<timestamp>.json`.
 
+<img width="1207" height="214" alt="image" src="https://github.com/user-attachments/assets/e3d92573-53b0-483e-9922-c942d5e2f04a" />
 
 
 ---
@@ -93,6 +98,8 @@ Each query is wrapped in `SELECT COUNT(*) FROM (...);`:
 - `1+` bad rows -> `FAIL` (reports how many failures were found)
 - DuckDB error (e.g. missing table/column) -> `ERROR`
 
+<img width="946" height="426" alt="image" src="https://github.com/user-attachments/assets/64054982-ad7f-4fb2-9198-05f861ea701d" />
+
 ---
 
 ## Step 7: Run Everything Together (`dbtmini build`)
@@ -102,3 +109,5 @@ Each query is wrapped in `SELECT COUNT(*) FROM (...);`:
 2. Prints the run summary and writes `target/run_results_*.json`.
 3. Immediately runs all schema tests (`run_tests`) and prints the test summary.
 4. Exits with code `1` if any model failed or any test did not pass (`0` if everything succeeded, `2` if a `DbtminiError` stopped execution).
+<img width="1264" height="672" alt="image" src="https://github.com/user-attachments/assets/64fc4ea3-2fad-4c4d-b12d-6d43cbadb597" />
+
