@@ -86,7 +86,8 @@ def test_end_to_end_example_project_pipeline(example_project_dir: Path) -> None:
 
 def test_cli_end_to_end_build(cli_runner: CliRunner, example_project_dir: Path) -> None:
     result = cli_runner.invoke(
-        app, ["build", "--project-dir", str(example_project_dir)]
+        app,
+        ["build", "--project-dir", str(example_project_dir), "--database", ":memory:"],
     )
     # The build runs models and then tests
     assert "RUNNING dbtmini run" in result.output

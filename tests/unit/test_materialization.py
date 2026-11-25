@@ -62,7 +62,7 @@ def test_build_create_statement_table() -> None:
     assert (
         statement
         == """CREATE OR REPLACE TABLE "analytics"."users"
-        AS (SELECT id, name FROM raw_users);"""
+            AS (SELECT id, name FROM raw_users);"""
     )
 
 
@@ -138,5 +138,5 @@ def test_resolve_materialization_cli_override(sample_config: ProjectConfig) -> N
 
 
 def test_resolve_materialization_invalid(sample_config: ProjectConfig) -> None:
-    with pytest.raises(ConfigError, match="Unsupported materialization"):
+    with pytest.raises(ConfigError, match="Invalid materialization"):
         resolve_materialization(sample_config, cli_materialization="invalid_type")

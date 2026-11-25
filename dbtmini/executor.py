@@ -8,6 +8,8 @@ import duckdb
 from dbtmini.config import ProjectConfig
 from dbtmini.errors import ExecutionError
 from dbtmini.materialization import (
+    Materialization,
+    build_create_statement,
     build_switch_statement,
     resolve_materialization,
 )
@@ -15,6 +17,18 @@ from dbtmini.models import Model
 from dbtmini.renderer import render_model
 from dbtmini.results import ModelResult, RunResult, RunStatus
 from dbtmini.seeds import SeedResult, load_seeds
+
+
+def _get_existing_relation_type(
+    conn: duckdb.DuckDBPyConnection, schema: str, model_name: str
+) -> str | None:
+    """Return the existing relation type ('BASE TABLE' or 'VIEW') in DuckDB, or None."""
+    row = conn.execute(
+        "SELECT table_type FROM information_schema.tables "
+        "WHERE table_schema = ? AND table_name = ?",
+        [schema, model_name],
+    ).fetchone()
+    return row[0] if row else None
 
 
 def execute_project(
@@ -50,12 +64,26 @@ def execute_project(
             model_materialization=model_mat,
         )
 
-        statements = build_switch_statement(
-            model_name=model_name,
-            switch_materialization=materialization,
-            sql=rendered_sql,
-            schema=config.schema,
-        )
+        existing_type = _get_existing_relation_type(conn, config.schema, model_name)
+        if existing_type is not None and (
+            (existing_type.upper() == "VIEW")
+            != (materialization == Materialization.VIEW)
+        ):
+            statements = build_switch_statement(
+                model_name=model_name,
+                switch_materialization=materialization,
+                sql=rendered_sql,
+                schema=config.schema,
+            )
+        else:
+            statements = [
+                build_create_statement(
+                    model_name=model_name,
+                    sql=rendered_sql,
+                    materialization=materialization,
+                    schema=config.schema,
+                )
+            ]
 
         t0 = time.perf_counter()
         try:

@@ -97,7 +97,7 @@ def _project_directory(project_dir_or_file: str | Path) -> dict[str, Any]:
             config_file = yaml.safe_load(f)
         except yaml.YAMLError as e:
             raise ConfigError(
-                message=f"Failed toparse the config file: {e}", file_path=project_file
+                message=f"Failed to parse the config file: {e}", file_path=project_file
             )
 
         if not isinstance(config_file, dict):
@@ -106,13 +106,14 @@ def _project_directory(project_dir_or_file: str | Path) -> dict[str, Any]:
                 file_path=project_file,
             )
 
+        if "name" not in config_file:
+            raise ConfigError(
+                message="Missing required key 'name' in dbtmini project file."
+            )
+        if not isinstance(config_file["name"], str):
+            raise ConfigError(message="Project name must be a string")
+
         for key in config_file.keys():
             if key not in ALLOWED_PROJECT_KEYS:
-                raise ConfigError(message="Invalid key in dbtmini projct file")
-            if "name" not in config_file:
-                raise ConfigError(
-                    message="Missing required key 'name' in dbtmini project file."
-                )
-            if not isinstance(config_file["name"], str):
-                raise ConfigError(message="Project name must be a string")
+                raise ConfigError(message="Invalid key in dbtmini project file")
     return config_file
