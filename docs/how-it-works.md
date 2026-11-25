@@ -110,4 +110,3 @@ Each query is wrapped in `SELECT COUNT(*) FROM (...);`:
 3. Immediately runs all schema tests (`run_tests`) and prints the test summary.
 4. Exits with code `1` if any model failed or any test did not pass (`0` if everything succeeded, `2` if a `DbtminiError` stopped execution).
 <img width="1264" height="672" alt="image" src="https://github.com/user-attachments/assets/64fc4ea3-2fad-4c4d-b12d-6d43cbadb597" />
-

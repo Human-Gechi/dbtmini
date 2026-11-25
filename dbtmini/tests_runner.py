@@ -9,6 +9,8 @@ from dbtmini.models import TestSpec
 
 
 class TestStatus(str, Enum):
+    "Str Enum for test status"
+
     PASS = "pass"
     FAIL = "fail"
     ERROR = "error"
@@ -24,6 +26,7 @@ class TestResult:
 
 
 def generate_not_null(test: TestSpec, schema: str) -> str:
+    """Generates a SQL statement for a not-null test"""
     quoted_column = quote_identifier(test.column)
     relation = build_relation_name(schema=schema, model_name=test.name)
 
@@ -35,6 +38,7 @@ def generate_not_null(test: TestSpec, schema: str) -> str:
 
 
 def generate_unique(test: TestSpec, schema: str) -> str:
+    """Generates a SQL statement for a unique test"""
     quoted_column = quote_identifier(test.column)
     relation = build_relation_name(schema=schema, model_name=test.name)
 
@@ -55,6 +59,16 @@ TEST_REGISTRY = {"not_null": generate_not_null, "unique": generate_unique}
 def run_tests(
     conn: duckdb.DuckDBPyConnection, test_specs: list[TestSpec], schema: str
 ) -> list[TestResult]:
+    """Run data quality tests against DuckDB tables and return the results.
+
+    Args:
+        conn: Active DuckDB connection.
+        test_specs: List of test specifications to execute.
+        schema: Target schema containing the relations under test.
+
+    Returns:
+        List of TestResult objects with status, duration, and message for each test.
+    """
     results: list[TestResult] = []
 
     for test in test_specs:
@@ -106,6 +120,14 @@ def run_tests(
 
 
 def format_test_summary(test_results: list[TestResult]) -> str:
+    """Format test execution results into a readable summary table.
+
+    Args:
+        test_results: List of TestResult objects produced by run_tests.
+
+    Returns:
+        Formatted multi-line string containing per-test rows and totals.
+    """
     lines: list[str] = []
 
     divider = "-" * 100
