@@ -6,7 +6,6 @@ A minimal implementation of dbt (data build tool) written in Python that runs SQ
 ## Repository Structure
 
 ```text
-dbtmini/
 ├── dbtmini/                       # Core package
 │   ├── cli.py                     # Typer CLI commands (compile, run, test, build)
 │   ├── config.py                  # Project YAML loader & ProjectConfig validation
@@ -27,8 +26,14 @@ dbtmini/
 │   │   ├── intermediate/          # int_customer_orders.sql, int_customer_payments.sql
 │   │   └── marts/                 # dim_customers.sql, fct_orders.sql
 │   ├── seeds/                     # customers.csv, orders.csv, payments.csv
-│   └── tests/
-│       └── tests.yml              # Column data quality tests
+│   ├── tests/
+│   │   └── tests.yml              # Column data quality tests
+│   └── target/                    # Generated outputs (gitignored)
+│       ├── compiled/
+│       │   ├── intermediate/      # int_customer_orders.sql, int_customer_payments.sql
+│       │   ├── marts/             # dim_customers.sql, fct_orders.sql
+│       │   └── staging/           # stg_customers.sql, stg_orders.sql, stg_payments.sql
+│       └── run_results_*.json     # Execution logs (plus run_results.json)
 ├── tests/                         # Automated test suite
 │   ├── conftest.py                # Shared pytest fixtures
 │   ├── fixtures/                  # Sample valid and error-case projects
@@ -40,6 +45,7 @@ dbtmini/
 │   └── how-it-works.md
 ├── .gitignore
 ├── .pre-commit-config.yaml        # Pre-commit hooks (formatting, YAML checks, ruff, mypy)
+├── CHANGELOG.md
 ├── pyproject.toml                 # Package metadata, scripts, ruff, mypy, and pytest config
 ├── requirements.txt               # Direct Python dependencies
 └── README.md
