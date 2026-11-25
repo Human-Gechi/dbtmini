@@ -115,8 +115,12 @@ dbtmini run
 # 3. Run data quality tests against the database
 dbtmini test
 ```
+<img width="1207" height="214" alt="image" src="https://github.com/user-attachments/assets/d7d8862b-2ff2-418c-aad6-fb12acbba014" />
 
-> **Screenshot Needed (Optional):** Add a terminal screenshot of `dbtmini build` here if you want to show sample output in the README.
+---
+
+<img width="1264" height="672" alt="image" src="https://github.com/user-attachments/assets/53a4aaee-0603-4d17-bccd-00de16522c3e" />
+
 
 ### CLI Options
 
