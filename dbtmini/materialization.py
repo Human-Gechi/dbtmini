@@ -74,7 +74,9 @@ def build_switch_statement(
         else Materialization.VIEW
     )
     statements.append(build_drop_statement(model_name, switches, schema))
-    statements.append(build_create_statement(model_name, sql, switches, schema))
+    statements.append(
+        build_create_statement(model_name, sql, switch_materialization, schema)
+    )
 
     return statements
 
